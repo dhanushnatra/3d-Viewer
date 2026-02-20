@@ -1,8 +1,27 @@
 import * as THREE from "./three/Three.js";
 import { GLTFLoader } from "./three/GLTFLoader.js";
+import { glb_url } from "./drop_handler.js";
 
 let scene, camera, renderer, sceneGroup;
-let sens = 8;
+let sens = 4;
+
+const loader = new GLTFLoader();
+
+function load_model(url) {
+	loader.load(
+		url,
+		(gltf) => {
+			const model = gltf.scene;
+			sceneGroup.add(model);
+			model.scale.set(1, 1, 1);
+			model.position.set(0, 0, 0);
+		},
+		undefined,
+		(error) => {
+			console.error("Error loading model:", error);
+		},
+	);
+}
 
 function init() {
 	const threeContainer = document.getElementById("three-container");
@@ -36,21 +55,7 @@ function init() {
 	directionalLight.position.set(5, 5, 5);
 	scene.add(directionalLight);
 
-	const loader = new GLTFLoader();
-
-	loader.load(
-		"./Duck.glb",
-		(gltf) => {
-			const model = gltf.scene;
-			sceneGroup.add(model);
-			model.scale.set(1, 1, 1);
-			model.position.set(0, 0, 0);
-		},
-		undefined,
-		(error) => {
-			console.error("Error loading model:", error);
-		},
-	);
+	load_model(glb_url ? glb_url : "./Duck.glb");
 
 	animate();
 }
@@ -80,6 +85,16 @@ function scaleScene(delta) {
 	}
 }
 
+function rerender() {
+	if (renderer && scene && camera) {
+		scene.remove(sceneGroup);
+		sceneGroup = new THREE.Group();
+		scene.add(sceneGroup);
+		load_model(glb_url ? glb_url : "./Duck.glb");
+		renderer.render(scene, camera);
+	}
+}
+
 function panCamera(deltaX, deltaY) {
 	if (camera) {
 		camera.position.x += deltaX * sens;
@@ -94,4 +109,4 @@ if (document.readyState === "loading") {
 	init();
 }
 
-export { rotateScene, panCamera, scaleScene };
+export { rotateScene, panCamera, scaleScene, rerender };
