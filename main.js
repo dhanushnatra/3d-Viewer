@@ -61,15 +61,15 @@ function detect() {
 				scale_scene(results.landmarks);
 			} else {
 				reset_zoom();
-			}
-			if (isRightHand) {
-				const hand_motion = handMotion.motion(results.landmarks[i]);
-				if (hand_motion) {
-					console.log(
-						"Hand motion detected:",
-						hand_motion.delta_x,
-						hand_motion.delta_y,
-					);
+				if (isRightHand) {
+					const hand_motion = handMotion.motion(results.landmarks[i]);
+					if (hand_motion) {
+						console.log(
+							"Hand motion detected:",
+							hand_motion.delta_x,
+							hand_motion.delta_y,
+						);
+					}
 				}
 			}
 			const landmarks = results.landmarks[i];
