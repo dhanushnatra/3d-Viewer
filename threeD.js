@@ -1,52 +1,87 @@
-import { Scene } from "./three/Three";
-import { AmbientLight } from "./three/Three";
-import { PerspectiveCamera } from "./three/Three";
-import { WebGLRenderer } from "./three/Three";
-import { GLTFLoader } from "./three/GLTFLoader";
+import * as THREE from "./three/Three.js";
+import { GLTFLoader } from "./three/GLTFLoader.js";
 
-const canvas_render = document.getElementById("threeD-canvas");
-const canvas_width = canvas_render.width;
-const canvas_height = canvas_render.height;
+let scene, camera, renderer, sceneGroup;
+let sens = 8;
 
-const scene = new Scene();
+function init() {
+	const threeContainer = document.getElementById("three-container");
 
-const camera = new PerspectiveCamera(
-	75,
-	canvas_width / canvas_height,
-	0.1,
-	1000,
-);
+	scene = new THREE.Scene();
+	scene.background = new THREE.Color(0x000000);
+	scene.background = null;
 
-const renderer = new WebGLRenderer({
-	canvas: canvas_render,
-	width: canvas_width,
-	height: canvas_height,
-});
+	camera = new THREE.PerspectiveCamera(
+		75,
+		threeContainer.clientWidth / threeContainer.clientHeight,
+		0.1,
+		1000,
+	);
 
-const ambientLight = new AmbientLight(0xffffff, 1);
-scene.add(ambientLight);
+	camera.position.z = 5;
 
-const loader = new GLTFLoader();
+	scene.add(camera);
 
-const load_model = async (url) => {
-	return new Promise((resolve, reject) => {
-		loader.load(
-			url,
-			(gltf) => {
-				resolve(gltf);
-			},
-			undefined,
-			(error) => {
-				reject(error);
-			},
-		);
-	});
-};
+	// Create a group for objects that will be rotated
+	sceneGroup = new THREE.Group();
+	scene.add(sceneGroup);
+
+	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+	renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+	threeContainer.appendChild(renderer.domElement);
+
+	const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+	scene.add(ambientLight);
+
+	const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+	directionalLight.position.set(5, 5, 5);
+	scene.add(directionalLight);
+
+	const loader = new GLTFLoader();
+
+	loader.load(
+		"./Duck.glb",
+		(gltf) => {
+			const model = gltf.scene;
+			sceneGroup.add(model);
+			model.scale.set(1, 1, 1);
+			model.position.set(0, -1, 0);
+		},
+		undefined,
+		(error) => {
+			console.error("Error loading model:", error);
+		},
+	);
+
+	animate();
+}
+
+function rotateScene(deltaX, deltaY) {
+	if (sceneGroup) {
+		sceneGroup.rotation.y += deltaX * sens;
+		sceneGroup.rotation.x += deltaY * sens;
+	}
+}
 
 const animate = () => {
 	requestAnimationFrame(animate);
-	renderer.render(scene, camera);
+	if (renderer && scene && camera) {
+		renderer.render(scene, camera);
+	}
 };
 
+function panCamera(deltaX, deltaY) {
+	if (camera) {
+		camera.position.x += deltaX * sens;
+		camera.position.y += deltaY * sens;
+	}
+}
 
-export {scene,load}
+// Initialize when DOM is ready
+if (document.readyState === "loading") {
+	document.addEventListener("DOMContentLoaded", init);
+} else {
+	init();
+}
+
+export { rotateScene, panCamera };

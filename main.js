@@ -4,8 +4,12 @@ import {
 	DrawingUtils,
 } from "./vision_bundle.mjs";
 
+import { HandMotion } from "./utils/state_handler.js";
+
 const videoRef = document.getElementById("video");
 let handLandmarker;
+
+const handMotion = new HandMotion();
 
 let animationFrameId;
 
@@ -49,33 +53,15 @@ function detect() {
 		for (let i = 0; i < results.landmarks.length; i++) {
 			const isRightHand =
 				results.handedness[i][0].categoryName === "Right";
-			// const state = get_state(results.landmarks[i]);
-			// hands_states[isRightHand ? "right" : "left"] = state;
-			// if (
-			// 	hands_states["right"] === "pinching" &&
-			// 	hands_states["left"] === "pinching"
-			// ) {
-			// 	console.log("Both hands are pinching");
-			// 	bothPinching = true;
-			// }
-			// if (!bothPinching) {
-			// 	if (state === "pinching") {
-			// 		console.log(
-			// 			isRightHand ? "Right" : "Left",
-			// 			" hand is pinching",
-			// 		);
-			// 	} else if (state === "pointing") {
-			// 		console.log(
-			// 			isRightHand ? "Right" : "Left",
-			// 			" hand is pointing",
-			// 		);
-			// 	} else {
-			// 		console.log(
-			// 			isRightHand ? "Right" : "Left",
-			// 			" hand is somthing",
-			// 		);
-			// 	}
-			// }
+
+			const hand_motion = handMotion.motion(results.landmarks[i]);
+			if (hand_motion) {
+				console.log(
+					"Hand motion detected:",
+					hand_motion.delta_x,
+					hand_motion.delta_y,
+				);
+			}
 			const landmarks = results.landmarks[i];
 
 			drawingUtils.drawConnectors(
@@ -93,5 +79,4 @@ function detect() {
 }
 
 init();
-console.log(canvas.width, canvas.height);
 cancelAnimationFrame(animationFrameId);
