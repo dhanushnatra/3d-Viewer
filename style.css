@@ -1,0 +1,23 @@
+.mp-canvas {
+	width: 100vw;
+	height: 100vh;
+}
+.threeD-canvas {
+	position: absolute;
+	top: 0;
+	margin-top: 20px;
+	right: 0;
+	background-color: rgba(32, 32, 32, 0.678);
+	width: 40vw;
+	height: 30vw;
+	border-radius: 1em;
+}
+@media (max-width: 728px) {
+	.mp-canvas {
+		width: 728px;
+	}
+	.threeD-canvas {
+		width: 70vw;
+		height: 40vh;
+	}
+}
