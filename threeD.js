@@ -44,7 +44,7 @@ function init() {
 			const model = gltf.scene;
 			sceneGroup.add(model);
 			model.scale.set(1, 1, 1);
-			model.position.set(-5, 0, 0);
+			model.position.set(0, 0, 0);
 		},
 		undefined,
 		(error) => {
