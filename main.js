@@ -4,13 +4,16 @@ import {
 	DrawingUtils,
 } from "./vision_bundle.mjs";
 
+import { is_double_pinch } from "./utils/hand_state.js";
+
+import { scale_scene, reset_zoom } from "./utils/zoom_handler.js";
+
 import { HandMotion } from "./utils/state_handler.js";
 
 const videoRef = document.getElementById("video");
 let handLandmarker;
 
 const handMotion = new HandMotion();
-
 let animationFrameId;
 
 async function init() {
@@ -53,14 +56,21 @@ function detect() {
 		for (let i = 0; i < results.landmarks.length; i++) {
 			const isRightHand =
 				results.handedness[i][0].categoryName === "Right";
-
-			const hand_motion = handMotion.motion(results.landmarks[i]);
-			if (hand_motion) {
-				console.log(
-					"Hand motion detected:",
-					hand_motion.delta_x,
-					hand_motion.delta_y,
-				);
+			if (is_double_pinch(results.landmarks)) {
+				console.log("Double pinch detected");
+				scale_scene(results.landmarks);
+			} else {
+				reset_zoom();
+			}
+			if (isRightHand) {
+				const hand_motion = handMotion.motion(results.landmarks[i]);
+				if (hand_motion) {
+					console.log(
+						"Hand motion detected:",
+						hand_motion.delta_x,
+						hand_motion.delta_y,
+					);
+				}
 			}
 			const landmarks = results.landmarks[i];
 

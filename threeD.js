@@ -8,7 +8,6 @@ function init() {
 	const threeContainer = document.getElementById("three-container");
 
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color(0x000000);
 	scene.background = null;
 
 	camera = new THREE.PerspectiveCamera(
@@ -45,7 +44,7 @@ function init() {
 			const model = gltf.scene;
 			sceneGroup.add(model);
 			model.scale.set(1, 1, 1);
-			model.position.set(0, -1, 0);
+			model.position.set(-5, 0, 0);
 		},
 		undefined,
 		(error) => {
@@ -70,6 +69,17 @@ const animate = () => {
 	}
 };
 
+function scaleScene(delta) {
+	if (sceneGroup) {
+		const scaleFactor = 1 + delta;
+		sceneGroup.scale.set(
+			sceneGroup.scale.x * scaleFactor,
+			sceneGroup.scale.y * scaleFactor,
+			sceneGroup.scale.z * scaleFactor,
+		);
+	}
+}
+
 function panCamera(deltaX, deltaY) {
 	if (camera) {
 		camera.position.x += deltaX * sens;
@@ -84,4 +94,4 @@ if (document.readyState === "loading") {
 	init();
 }
 
-export { rotateScene, panCamera };
+export { rotateScene, panCamera, scaleScene };

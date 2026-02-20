@@ -10,7 +10,7 @@ const RING_MID = 14;
 const PINKY_MID = 18;
 const THUMB_TIP = 4;
 
-const PINCH_THRESHOLD = 0.05;
+const PINCH_THRESHOLD = 0.1;
 
 function is_pinch(landmarks) {
 	const index_finger = landmarks[INDEX_TIP];
@@ -30,6 +30,21 @@ function is_pointing(landmarks) {
 	return index_finger && middle_finger && ring_finger && pinky_finger;
 }
 
+function is_double_pinch(both_landmarks) {
+	if (both_landmarks.length < 2) {
+		return false;
+	}
+	const h1_index_tip = both_landmarks[0][INDEX_TIP];
+	const h1_thumb = both_landmarks[0][THUMB_TIP];
+	const h2_index_tip = both_landmarks[1][INDEX_TIP];
+	const h2_thumb = both_landmarks[1][THUMB_TIP];
+
+	const h1_pinch = get_distance(h1_index_tip, h1_thumb) < PINCH_THRESHOLD;
+	const h2_pinch = get_distance(h2_index_tip, h2_thumb) < PINCH_THRESHOLD;
+
+	return h1_pinch && h2_pinch;
+}
+
 function get_state(landmarks) {
 	if (is_pinch(landmarks)) {
 		return "pinching";
@@ -40,4 +55,4 @@ function get_state(landmarks) {
 	return "open";
 }
 
-export { get_state };
+export { get_state, is_double_pinch };
