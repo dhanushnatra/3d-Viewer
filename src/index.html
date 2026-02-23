@@ -8,23 +8,51 @@
 		<script type="module" src="./main.js"></script>
 		<script type="module" src="./threeD.js"></script>
 		<script type="module" src="./drop_handler.js"></script>
+		<script type="module" src="./utils/controls.js"></script>
 	</head>
 	<body>
-		<div
-			id="instructions"
-			class="instructions"
-			style="
-				z-index: 5;
-				position: absolute;
-				top: 10px;
-				color: white;
-				left: 10px;
-				background: rgb(0, 0, 0);
-				padding: 10px;
-				border-radius: 5px;
-			"
-		>
-			<p>Drag and drop a GLB file onto the page to view it in 3D.</p>
+		<div class="controls" id="controls">
+			Controls:
+			<div class="control-group">
+				<label for="sensitivity-control"
+					>Sensitivity : <span id="sensitivity-value"></span
+				></label>
+				<input
+					type="range"
+					name="sensitivity"
+					id="sensitivity-control"
+					min="2"
+					max="20"
+					value="5"
+				/>
+			</div>
+			<div>
+				<label for="video-controls"> Show Video: </label>
+				<input
+					type="range"
+					name="video-controls"
+					id="video-toggle"
+					min="0"
+					max="1"
+					value="1"
+					style="width: 3em"
+				/>
+			</div>
+			<div>
+				<label for="toggle-axes"> Show Help: </label>
+				<input
+					type="range"
+					name="toggle-help"
+					id="toggle-help"
+					min="0"
+					max="1"
+					value="1"
+					style="width: 3em"
+				/>
+			</div>
+		</div>
+		<div class="help" id="help">
+			<img src="./instructions.png" width="40%" alt="instructions" />
 		</div>
 		<video id="video" autoplay playsinline style="display: none"></video>
 		<canvas id="mp-canvas" class="mp-canvas"></canvas>

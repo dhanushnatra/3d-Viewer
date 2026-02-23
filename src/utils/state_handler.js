@@ -21,10 +21,8 @@ class HandMotion {
 		const delta_y = curr_pos.y - this.prev_pos.y;
 
 		if (this.prev_state === "pointing") {
-			console.log("Panning camera with delta:", delta_x, delta_y);
 			panCamera(delta_x, delta_y);
 		} else if (this.prev_state === "pinching") {
-			console.log("Rotating scene with delta:", delta_x, delta_y);
 			rotateScene(delta_x, delta_y);
 		}
 

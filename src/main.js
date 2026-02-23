@@ -13,7 +13,7 @@ import { HandMotion } from "./utils/state_handler.js";
 const videoRef = document.getElementById("video");
 let handLandmarker;
 
-const handMotion = new HandMotion();
+const handMotion = new HandMotion({ min_threshold: 0.05, max_threshold: 0.2 });
 let animationFrameId;
 
 async function init() {

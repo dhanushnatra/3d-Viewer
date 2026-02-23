@@ -3,7 +3,25 @@ import { GLTFLoader } from "./three/GLTFLoader.js";
 import { glb_url } from "./drop_handler.js";
 
 let scene, camera, renderer, sceneGroup;
-let sens = 4;
+let sens = 5;
+
+const change_sensitivity = (value) => {
+	sens = value;
+	console.log("Sensitivity set to:", sens);
+};
+
+const toggleAxes = (show) => {
+	if (show) {
+		const axesHelper = new THREE.GridHelper(10, 10);
+		scene.add(axesHelper);
+	} else {
+		scene.traverse((child) => {
+			if (child instanceof THREE.GridHelper) {
+				scene.remove(child);
+			}
+		});
+	}
+};
 
 const loader = new GLTFLoader();
 
@@ -104,4 +122,11 @@ function panCamera(deltaX, deltaY) {
 
 init();
 
-export { rotateScene, panCamera, scaleScene, rerender };
+export {
+	rotateScene,
+	panCamera,
+	scaleScene,
+	rerender,
+	change_sensitivity,
+	toggleAxes,
+};
