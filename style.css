@@ -1,3 +1,10 @@
+body {
+	margin: 0;
+	overflow: hidden;
+	font-family: Arial, sans-serif;
+	background-color: #000;
+	color: #fff;
+}
 .mp-canvas {
 	width: 100vw;
 	height: 100vh;
@@ -5,13 +12,49 @@
 .three-container {
 	position: absolute;
 	top: 0;
-	left: 0;
+	right: 0;
 	z-index: 6;
 	background-color: transparent;
 	width: 100vw;
 	height: 100vh;
 	border-radius: 1em;
 }
+
+.controls {
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	z-index: 7;
+	display: flex;
+	gap: 1em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.8);
+	padding: 1em;
+	border-radius: 0.5em;
+}
+
+.control-group {
+	display: flex;
+	gap: 0.5em;
+	flex-direction: column;
+	color: white;
+}
+
+.help {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 7;
+	margin-left: 1em;
+	margin-bottom: 1em;
+}
+
+.help img {
+	border-radius: 1em;
+}
+
 @media (max-width: 728px) {
 	.mp-canvas {
 		width: 728px;

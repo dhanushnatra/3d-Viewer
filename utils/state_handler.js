@@ -1,5 +1,7 @@
 import { get_state } from "./hand_state.js";
 import { rotateScene, panCamera } from "../threeD.js";
+import { get_distance } from "./vector_calc.js";
+import { damp } from "../three/math/MathUtils.js";
 
 class HandMotion {
 	constructor() {
@@ -21,10 +23,8 @@ class HandMotion {
 		const delta_y = curr_pos.y - this.prev_pos.y;
 
 		if (this.prev_state === "pointing") {
-			console.log("Panning camera with delta:", delta_x, delta_y);
 			panCamera(delta_x, delta_y);
 		} else if (this.prev_state === "pinching") {
-			console.log("Rotating scene with delta:", delta_x, delta_y);
 			rotateScene(delta_x, delta_y);
 		}
 

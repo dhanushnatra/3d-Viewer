@@ -45,7 +45,19 @@ function is_double_pinch(both_landmarks) {
 	return h1_pinch && h2_pinch;
 }
 
+function is_fist(landmarks) {
+	const index_finger = landmarks[INDEX_TIP].y > landmarks[INDEX_MID].y;
+	const middle_finger = landmarks[MIDDLE_TIP].y > landmarks[MIDDLE_MID].y;
+	const ring_finger = landmarks[RING_TIP].y > landmarks[RING_MID].y;
+	const pinky_finger = landmarks[PINKY_TIP].y > landmarks[PINKY_MID].y;
+
+	return index_finger && middle_finger && ring_finger && pinky_finger;
+}
+
 function get_state(landmarks) {
+	if (is_fist(landmarks)) {
+		return "fist";
+	}
 	if (is_pinch(landmarks)) {
 		return "pinching";
 	}
